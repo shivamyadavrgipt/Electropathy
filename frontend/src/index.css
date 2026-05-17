@@ -1,0 +1,14 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1a18; color: #f5f5f3; }
+button { cursor: pointer; font-family: inherit; }
+textarea, input, select { font-family: inherit; }
+
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+  #root { font-size: 14px; }
+}
+
+@media (max-width: 480px) {
+  body { font-size: 13px; }
+  #root { font-size: 13px; }
+}
