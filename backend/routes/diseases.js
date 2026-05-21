@@ -22,10 +22,16 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const disease = await Disease.create(req.body);
+    const disease = new Disease(req.body);
+    await disease.save();
+
     res.status(201).json(disease);
+
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({
+      message: err.message,
+      errors: err.errors
+    });
   }
 });
 

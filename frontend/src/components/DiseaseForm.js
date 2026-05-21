@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const emptyFormula = () => ({ name: '', potency: '', detail: '' });
 const emptyDosage = () => ({ phase: '', freq: '', dose: '', duration: '' });
@@ -6,7 +6,7 @@ const emptyDosage = () => ({ phase: '', freq: '', dose: '', duration: '' });
 export default function DiseaseForm({ theme, initial, categories, onSave, onCancel, onAddCategory, onRemoveCategory }) {
   const dark = theme === 'dark';
   const [name, setName] = useState(initial?.name || '');
-  const [cat, setCat] = useState(initial?.cat || categories[0]?.name || '');
+  const [cat, setCat] = useState('General');
   const [formulas, setFormulas] = useState(initial?.formula?.length ? initial.formula.map(f => ({ ...f })) : [emptyFormula()]);
   const [symptoms, setSymptoms] = useState(initial?.symptoms?.join(', ') || '');
   const [avoid, setAvoid] = useState(initial?.avoid?.join(', ') || '');
@@ -14,6 +14,12 @@ export default function DiseaseForm({ theme, initial, categories, onSave, onCanc
   const [note, setNote] = useState(initial?.note || '');
   const [newCat, setNewCat] = useState('');
   const [catError, setCatError] = useState('');
+
+  useEffect(() => {
+  if (!cat && categories.length > 0) {
+    setCat(categories[0]._id);
+  }
+}, [categories, cat]);
 
   const updateFormula = (i, key, val) => setFormulas(prev => prev.map((f, fi) => fi === i ? { ...f, [key]: val } : f));
   const addFormula = () => setFormulas(prev => [...prev, emptyFormula()]);
@@ -42,6 +48,7 @@ export default function DiseaseForm({ theme, initial, categories, onSave, onCanc
   };
 
   const handleSubmit = () => {
+    console.log("SUBMITTING CAT:", cat);
     if (!name.trim()) return alert('Disease name is required.');
     onSave({
       name: name.trim(),
@@ -87,7 +94,7 @@ export default function DiseaseForm({ theme, initial, categories, onSave, onCanc
         <div>
           <label style={lbl}>Category</label>
           <select style={inp} value={cat} onChange={e => setCat(e.target.value)}>
-            {categories.map(c => <option key={c._id} value={c.name}>{c.name}</option>)}
+            {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
           </select>
         </div>
       </div>
