@@ -4,7 +4,9 @@ import DiseaseForm from '../components/DiseaseForm';
 import DiseaseDetail from '../components/DiseaseDetail';
 import Sidebar from '../components/Sidebar';
 
-const api = axios.create();
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
+});
 
 export default function DashboardPage() {
   const [diseases, setDiseases] = useState([]);
