@@ -20,7 +20,9 @@ app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB error:', err));
+  .catch(err => {
+    console.error('MongoDB error FULL:', err);
+  });
 
 app.use('/api/diseases', diseaseRoutes);
 app.use('/api/categories', categoryRoutes);
