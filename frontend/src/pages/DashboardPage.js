@@ -4,8 +4,13 @@ import DiseaseForm from '../components/DiseaseForm';
 import DiseaseDetail from '../components/DiseaseDetail';
 import Sidebar from '../components/Sidebar';
 
+const rawApiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const apiUrl = rawApiUrl.startsWith('http://') || rawApiUrl.startsWith('https://')
+  ? rawApiUrl
+  : `http://${rawApiUrl}`;
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
+  baseURL: apiUrl,
 });
 
 export default function DashboardPage() {
@@ -20,6 +25,7 @@ export default function DashboardPage() {
   const [theme, setTheme] = useState('dark');
   const [showSidebar, setShowSidebar] = useState(window.innerWidth > 768);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [insertionOrder, setInsertionOrder] = useState({});
 
   useEffect(() => {
     document.body.dataset.theme = theme;
@@ -63,6 +69,12 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
+
+  useEffect(() => {
+    const map = {};
+    diseases.forEach((d, idx) => { map[d._id] = idx + 1; });
+    setInsertionOrder(map);
+  }, [diseases]);
 
   const handleSaveDisease = async (data) => {
     if (editDisease) {
@@ -132,7 +144,7 @@ export default function DashboardPage() {
               ☰
             </button>
           )}
-          <span style={{ fontWeight: 500, fontSize: isMobile ? '14px' : '30px', color: theme === 'dark' ? '#9FE1CB' : '#0F6E56', whiteSpace: 'nowrap' }}>⚕ Maa Hiravati Clinic</span>
+          <span style={{ fontWeight: 500, fontSize: isMobile ? '14px' : '30px', color: theme === 'dark' ? '#9FE1CB' : '#0F6E56', whiteSpace: 'nowrap' }}>⚕ Electropathy</span>
         </div>
         <button
           onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
@@ -154,6 +166,7 @@ export default function DashboardPage() {
               <Sidebar
                 theme={theme}
                 diseases={filtered}
+                insertionOrder={insertionOrder}
                 selected={selected}
                 filter={filter}
                 onFilter={setFilter}
@@ -198,6 +211,7 @@ export default function DashboardPage() {
                 <Sidebar
                   theme={theme}
                   diseases={filtered}
+                  insertionOrder={insertionOrder}
                   selected={selected}
                   filter={filter}
                   onFilter={setFilter}

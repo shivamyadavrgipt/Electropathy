@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const COLORS = ['#185FA5','#0F6E56','#993C1D','#993556','#5F5E5A','#3B6D11','#854F0B','#A32D2D','#534AB7','#1D9E75'];
 
-export default function Sidebar({ theme, diseases, selected, filter, onFilter, onSelect, onDelete, onAdd }) {
+export default function Sidebar({ theme, diseases, selected, filter, onFilter, onSelect, onDelete, onAdd, insertionOrder }) {
   const [activeMenuId, setActiveMenuId] = useState(null);
   const dark = theme === 'dark';
   const bg = dark ? '#2a2a28' : '#fafaf8';
@@ -53,6 +53,9 @@ export default function Sidebar({ theme, diseases, selected, filter, onFilter, o
               position: 'relative',
             }}
           >
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'transparent', color: hint, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, flexShrink: 0, fontSize: 12 }}>
+              {insertionOrder?.[d._id] || (i + 1)}
+            </div>
             <div style={{ width: 8, height: 8, borderRadius: '50%', background: COLORS[i % COLORS.length], flexShrink: 0 }} />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 13, color: text }}>{d.name}</div>
